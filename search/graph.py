@@ -1,7 +1,6 @@
 from collections import deque
 
 import networkx as nx
-#import matplotlib.pyplot
 
 
 class Graph:
@@ -16,7 +15,7 @@ class Graph:
         """
         self.graph = nx.read_adjlist(filename, create_using=nx.DiGraph, delimiter=";")
 
-    def bfs(self, start, queue=None, end=None, visited=None):
+    def bfs(self, start, end=None, visited=None):
         """
         * If there's no end node input, return a list nodes with the order of BFS traversal
         * If there is an end node input and a path exists, return a list of nodes with the order of the shortest path
@@ -34,13 +33,10 @@ class Graph:
         if end is not None and end not in self.graph:
             raise ValueError(f"End node '{end}' is not in the graph")
 
-        # To keep track of visited nodes
-        if visited is None:
-            visited = set()
-
-        # Initialize the queue
-        if queue is None:
-            queue = deque([(start, [start])]) 
+        
+        # Initialize visited and queue
+        visited = visited or set()
+        queue = deque([(start, [start])])  # (current_node, path_to_node)
 
 
         while queue:
@@ -66,40 +62,24 @@ class Graph:
 
         # If no end node was specified, return BFS traversal order
         return list(visited)
-    
-    
-"""
+
 
 def main():
-
+    # Initialize the graph
     tiny_network = "data/tiny_network.adjlist"
-
-
-    # Create the graph object
     g = Graph(tiny_network)
 
+    # Test BFS traversal
     start_node = "Luke Gilbert"
+    print(f"BFS Traversal from {start_node}: {g.bfs(start=start_node)}")
+
+    # Test BFS shortest path
     end_node = "Hani Goodarzi"
-
-    res = g.bfs(start_node, end=end_node)
-    print(res)
-
-    # Visualize the graph
-    plt.figure(figsize=(10, 6))  # Optional: Adjust figure size
-    pos = nx.circular_layout(g.graph)
-    nx.draw(g.graph, pos, with_labels=False, node_color="lightblue", node_size=500)
-    nx.draw_networkx_labels(g.graph, pos, font_size=8)  # Set smaller font size for labels
-    plt.title("Graph Visualization")
-    plt.show()
+    path = g.bfs(start=start_node, end=end_node)
+    if path:
+        print(f"Shortest path from {start_node} to {end_node}: {path}")
+    else:
+        print(f"No path exists from {start_node} to {end_node}.")
 
 if __name__ == "__main__":
-
     main()
-
-       
-
-
-"""
-
-
-
