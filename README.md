@@ -1,4 +1,4 @@
-# Assignment 2 - Breadth-first search
+# Assignment 2. Breadth-First search
 
 ---
 
