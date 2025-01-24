@@ -1,8 +1,11 @@
-# Assignment 2
-Breadth-first search
+# Assignment 2 - Breadth-first search
 
-# Assignment Overview
+---
+
+## Assignment Overview
 The purpose of this assignment is to get you comfortable working with graph structures and to implement a breadth-first search function to traverse the graph and find the shortest path between nodes.
+
+---
 
 ## Description
 
