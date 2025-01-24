@@ -61,11 +61,4 @@ The `tests/` folder contains unit tests for the `bfs` method in the `Graph` clas
      - Nonexistent start node.
      - Nonexistent end node.
 
----
 
-## How to Run the Tests
-
-1. **Install Dependencies**:
-   Install the required packages using `pip`:
-   ```bash
-   pip install pytest networkx
