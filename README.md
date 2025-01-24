@@ -4,74 +4,68 @@ Breadth-first search
 # Assignment Overview
 The purpose of this assignment is to get you comfortable working with graph structures and to implement a breadth-first search function to traverse the graph and find the shortest path between nodes.
 
-# Assignment Tasks
+## Description
 
-## Coding Assessment
-In search/graph.py:
-* Define the function bfs that takes in a graph, start node, and optional node and:
-	* If no end node is provided, returns a list of nodes in order of breadth-first search traversal from the given start node
-	* If an end node is provided and a path exists, returns a list of nodes in order of the shortest path to the end node
-	* If an end node is provided and a path does not exist, returns None
-* Be sure that your code can handle possible edge cases, e.g.:
-	* running bfs traversal on an empty graph
-	* running bfs traversal on an unconnected graph
-	* running bfs from a start node that does not exist in the graph
-	* running bfs search for an end node that does not exist in the graph
-	* any other edge cases you can think of 
+The `search/graph.py` script contains the `Graph` class, which initializes a graph from a `.adjlist` file using the NetworkX package. This class also includes the implementation of the **Breadth-First Search (BFS)** algorithm, defined in the `bfs` method.
 
-In test/test_bfs.py:
-* Write unit tests for breadth-first traversal and breadth-first search 
-* You may use the two networks provided in the data folder or create your own for testing
-* Test at least 2 possible edge cases (listed above)
-* Include a test case that fails and raises an exception
+### Breadth-First Search (`bfs`)
 
+The `bfs` method performs a BFS traversal or finds the shortest path in the graph, depending on the provided arguments.
 
-## Software Development Assessment
+1. **Visited Set**: 
+   - A set named `visited` is created to store nodes that have already been explored.
 
-* Write unit tests (in the test_bfs.py file) for your breadth first search
-* Replace these instructions with a brief description of bfs in your forked repo
-	
-* Automate Testing with a [Github Actions](https://docs.github.com/en/actions)
+2. **Queue Initialization**: 
+   - A queue is initialized using the `deque` class from the `collections` package.
+   - The starting node, which must be provided as an argument to the function, is added to the queue.
 
-	See blogposts below on helping set up github actions with pytest:
-	
-	* [post 1](https://blog.dennisokeeffe.com/blog/2021-08-08-pytest-with-github-actions)
-	* [post 2](https://mattsegal.dev/pytest-on-github-actions.html)
-	* Add "! [BuildStatus] (https://github.com/ < your-github-username > /HW2-BFS/workflows/HW2-BFS/badge.svg?event=push)" (update link and remove spaces) to the beginning of your readme file
-	* Also refer to previous assignment for more in-depth help with GitHub actions
+3. **Traversal Process**:
+   - Nodes are dequeued (removed from the front of the queue) one at a time.
+   - If the dequeued node is not in the `visited` set, it is added to the set.
+   - If the node already exists in `visited`, the function skips it and moves to the next node in the queue.
+   - If the dequeued node matches the optional `end` node argument, the method returns the path leading to that node.
+   - Otherwise, the method iterates over the neighbors of the current node. Neighbors that have not yet been visited are added to the queue with the path updated.
 
-	Ensure that the github actions complete the following:
-	* runs pytest
+4. **Return Values**:
+   - If the `end` node is specified and a path is found, the function returns the shortest path to that node.
+   - If the `end` node is specified but no path is found, the function returns `None`.
+   - If no `end` node is specified, the function returns the full list of visited nodes in BFS traversal order.
 
-# Getting Started
-To get started you will need to fork this repository onto your own github. You will then work on the code base from your own repo and make changes to it in the form of commits. 
+### Edge Case Handling
 
-# Reference Information
-## Test Data
-Two networks have been provided in an adjacency list format readable by [networkx](https://networkx.org/), is a commonly used python package for working with graph structures. These networks consist of two types of nodes:
-* Faculty nodes 
-* Pubmed ID nodes
+The `bfs` function includes handling for the following edge cases:
+- **Empty Graph**: 
+  - If the graph is empty, a `ValueError` is raised.
+- **Nonexistent Start Node**: 
+  - If the starting node is not in the graph, a `ValueError` is raised.
+- **Nonexistent End Node**: 
+  - If the specified `end` node does not exist in the graph, a `ValueError` is raised.
 
-However, since these are both stored as strings, you can treat them as equivalent nodes when traversing the graph. The first graph ("citation_network.adjlist") has nodes consisting of all BMI faculty members, the top 100 Pubmed papers *cited by* faculty, and the top 100 papers that *cite* faculty publications. Edges are directed and and edge from node A -> B indicates that node A *is cited by* node B. There are 5120 nodes and 9247 edges in this network.
+---
 
-The second network is a subgraph of the first, consisting of only the nodes and edges along the paths between a small subset of faculty. There are 30 nodes and 64 edges.
+## Unit Tests for `bfs`
 
-# Completing the assignment
-Make sure to push all your code to github, ensure that your unit tests are correct, and submit a link to your github through the google classroom assignment.
+The `tests/` folder contains unit tests for the `bfs` method in the `Graph` class. These tests are written using the `pytest` framework to ensure the correctness of BFS traversal, shortest path functionality, and edge case handling.
 
-# Grading
+### Test Descriptions
 
-## Code (6 points)
-* Breadth-first traversal works correctly (3)
-* Traces the path from one faculty to another (2)
-* Handles edge cases (1)
+1. **`test_bfs_traversal`**:
+   - Validates that BFS traversal explores the correct number of nodes using the `tiny_network.adjlist` file.
 
-## Unit tests (3 points)
-* Output traversal for mini data set (1)
-* Tests for at least two possible edge cases (1)
-* Correctly uses exceptions (1)
+2. **`test_bfs`**:
+   - Tests the shortest path functionality for both connected and disconnected nodes using the `citation_network.adjlist` file.
 
-## Style (1 points)
-* Readable code with clear comments and method descriptions
-* Updated README with description of your methods
+3. **`test_bfs_edge_cases`**:
+   - Ensures BFS handles edge cases correctly, including:
+     - Empty graph.
+     - Nonexistent start node.
+     - Nonexistent end node.
 
+---
+
+## How to Run the Tests
+
+1. **Install Dependencies**:
+   Install the required packages using `pip`:
+   ```bash
+   pip install pytest networkx
